@@ -12,20 +12,30 @@ app.get('/', (req, res) => {
                 req.socket.remoteAddress ||
             (req.connection.socket ? req.connection.socket.remoteAddress : null);
     console.log(ip);
-    res.send('Hello, World! : ' + ip + "," + new Date());
+    res.send('Hello, New World! : ' + ip + "," + new Date());
 });
 
 app.get('/health', (req, res) => {
     res.status(200).send();
 });
 
-app.get('/members', (req, res) => {
-  connection.query('SELECT * from [회원목록테이블]', (error, rows) => {
+app.get('/users', (req, res) => {
+  connection.query('SELECT * from Users', (error, rows) => {
     if (error) throw error;
     console.log('User info is: ', rows);
     res.send(rows);
   });
 });
+
+app.get('/users/:id', (req, res) => {
+  connection.query('SELECT * from Users WHERE id=\'' + req.params.id + '\'', (error, rows) => {
+    if (error) throw error;
+    console.log('User detail info is: ', rows);
+    res.send(rows);
+  });
+});
+
+
 
 app.listen(app.get('port'), () => {
   console.log('Express server listening on port ' + app.get('port'));
